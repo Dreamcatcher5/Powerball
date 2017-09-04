@@ -1,39 +1,50 @@
-max_white = 69
-whiteList = {}
-for i in range(1,max_white+1):
-    whiteList[i] = 0.0;
-lrp = {}
-for i in range(1,max_white+1):
-    lrp[i] = 0;
-wc = 0
-max_red = 26
-redList = {}
-for i in range(1,max_red+1):
-    redList[i] = 0.0;
-rc = 0
-lrpr = {}
-for i in range(1,max_red+1):
-    lrpr[i] = 0;
-iw = 1
-ir = 1
-f = open("powerball.txt")
-for line in f:
-    balls = line.split()
-    #print balls
-    # Do whites
-    for b in range(1,6):
-        whiteList[int(balls[b])] += 1
-        wc += 1
-        if lrp[int(balls[b])] == 0:
-            lrp[int(balls[b])] = iw # balls with highest i are last recently picked
-        iw += 1
-    # Do red ball
-    if  not int(balls[6]) > max_red:
-        redList[int(balls[6])] += 1
-        if lrpr[int(balls[6])] == 0:
-            lrpr[int(balls[6])] = ir # balls with highest i are last recently picked
-        ir += 1
-        rc += 1
+import argparse
+
+
+MAX_WHITE = 69
+MAX_RED = 26
+def ParseNumbers():
+
+    whiteList = {}
+    redList = {}
+    lrpr = {}
+    wc = 0
+    rc = 0
+
+    for i in range(1,MAX_WHITE+1):
+        whiteList[i] = 0.0;
+    lrp = {}
+    for i in range(1,MAX_WHITE+1):
+        lrp[i] = 0;
+
+
+
+    for i in range(1,MAX_RED+1):
+        redList[i] = 0.0;
+
+
+    for i in range(1,MAX_RED+1):
+        lrpr[i] = 0;
+    iw = 1
+    ir = 1
+    f = open("powerball.txt")
+    for line in f:
+        balls = line.split()
+        #print balls
+        # Do whites
+        for b in range(1,6):
+            whiteList[int(balls[b])] += 1
+            wc += 1
+            if lrp[int(balls[b])] == 0:
+                lrp[int(balls[b])] = iw # balls with highest i are last recently picked
+            iw += 1
+        # Do red ball
+        if  not int(balls[6]) > MAX_RED:
+            redList[int(balls[6])] += 1
+            if lrpr[int(balls[6])] == 0:
+                lrpr[int(balls[6])] = ir # balls with highest i are last recently picked
+            ir += 1
+            rc += 1
 
 # Compile everything, print results
 white_sorted = whiteList.keys()
@@ -70,3 +81,10 @@ for i in red_sorted:
     print "Ball %d: %f" % (i, lrpr[i])
 
 
+def Main():
+
+    whiteList, redList = ParseNumbers()
+    PrintStats(whiteList, redList)
+
+if __name__ == "__main__":
+    Main()
