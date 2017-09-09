@@ -1,15 +1,20 @@
 """Author: Ben Johnstone"""
 
 import argparse
-from datetime import datetime
+
 
 from drawing import Drawing
+
+MAX_WHITE = 69
+MAX_RED = 26
 
 #TODO
 # 1 Do argparse for main
 # 2 Write drawing class
 # 3 Figure out what statistics should be reported
 # 4 set up logger
+# 5 winnings calculator???
+# 6 Speed benchmarking??
 
 def ParseDrawingsFile():
     """
@@ -21,7 +26,7 @@ def ParseDrawingsFile():
     for line in f:
         print(line)
         lsplit = line.split()
-        drawings.append(Drawing(lsplit[0], set(lsplit[1:6]), lsplit[6])
+        drawings.append(Drawing(lsplit[0], set(lsplit[1:6]), lsplit[6]))
     f.close()
     return drawings
 
@@ -61,11 +66,31 @@ def PrintStats(whiteList, redList):
         print ("Ball %d: %f" % (i, lrpr[i]))
 
 
+
+def LeastRecentWhites(drawings):
+    """Take the list of drawings and return a list of the seen white balls, ordered from least to
+    most recent"""
+
+    seenBalls = {}
+
+    # Sort the drawings so we can stop iterating early
+    sortedDrawings = sorted(drawings, key=lambda d: d.GetDate(), reverse=True)
+    for d in sortedDrawings:
+        for b in d.GetNumbers():
+            if b not in seenBalls:
+                seenBalls[b] = d.GetDate()
+        # If we've seen all the balls then we don't need to look anymore
+        if len(seenBalls) == MAX_WHITE:
+            break
+
+    return [k for k in sorted(seenBalls, key=seenBalls.get)]
+
+
 def Main():
 
-    drawings = []
-    whiteList, redList = ParseDrawingsFile()
-    PrintStats(whiteList, redList)
+    drawings = ParseDrawingsFile()
+    lrw = LeastRecentWhites(drawings)
+    print(lrw)
 
 if __name__ == "__main__":
     Main()
