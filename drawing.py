@@ -1,9 +1,7 @@
 """Author: Ben Johnstone"""
 
-from datetime import datetime
 
-MAX_WHITE = 69
-MAX_RED = 26
+
 
 class Drawing():
 
@@ -11,10 +9,11 @@ class Drawing():
 	NUM_WHITES = 5
 	JACKPOT = -1
 
-	def __init__(self, date, numbers, powerball):
-		self._date = datetime.strptime(date, "%m/%d/%Y")
-		self._numbers = numbers
-		self._powerball = powerball
+	def __init__(self, date, numbers=[], powerball=0, jackpot=None):
+		self._date = date
+		self._numbers = set(int(n) for n in list(numbers))
+		self._powerball = int(powerball)
+		self._jackpot = self.JACKPOT if jackpot is None else jackpot
 
 	def GetDate(self):
 		return self._date
@@ -27,7 +26,7 @@ class Drawing():
 
 	def MatchingNumbers(self, picks):
 		"""Determine how many of the pick's numbers match the Drawing's numbers"""
-		return len(set(picks.GetNumbers()) & set(self._numbers))
+		return len(picks.GetNumbers() & self._numbers)
 
 	def MatchingPowerball(self, picks):
 		return picks.GetPowerball() == self._powerball
