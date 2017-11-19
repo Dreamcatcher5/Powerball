@@ -1,0 +1,2 @@
+MAX_WHITE = 69
+MAX_RED = 26

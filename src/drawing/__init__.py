@@ -1,5 +1,3 @@
-"""Author: Ben Johnstone"""
-
 
 
 
@@ -56,4 +54,3 @@ class Drawing():
 			amt = 4
 
 		return amt
-		
