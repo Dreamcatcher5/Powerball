@@ -5,16 +5,29 @@ Author: Ben Johnstone
 
 TODO: Start and end dates
 """
-import json
 
-import Picker
-from Powerball.powerball import ParseDrawingsFile
+from utilities.fileParser import ParseJSONFile, ParseDrawingsFile, ParseJackpotFile
+
+
+
+def SetConfiguration(config, jsonConfig, args):
+    """Sets the configuration for the run. Values in args will override any values in the
+    jsonConfig dictionary
+
+    :param config:
+    :type config:
+    :param jsonConfig:
+    :type jsonConfig:
+    :param args:
+    :type args:
+    :return: 
+    """
 
 def Run(config, history):
 	"""Creates pickers from the JSON configuration. Compares picks against historical data
 	:param config: Parsed JSON configuration file
 	:type config: list
-	:param history: Historical 
+	:param history: Historical drawings
 	"""
 
 
@@ -26,12 +39,13 @@ def Main():
 	config = ""
 	history = []
 	parser = argparse.ArgumentParser(description="")
-    parser.add_argument("--history", "-h", required=True,
+    parser.add_argument("--history", "-h", required=False,
                         help="Name of the file containing the historical powerball drawings")
     parser.add_argument("--config", "-c", help="JSON configuration file that contains the types" \
-        	            + " of picks to make", required=True)
+        	            + " of picks to make", required=False)
     # Start date (optional)
     # End date (optional)
+    # Output file
     args = parse.parse_args()
 
     # Parse config file

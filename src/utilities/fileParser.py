@@ -1,12 +1,27 @@
+"""This file contains parsing functions for several different file types.
 
+Author: Ben Johnstone
+
+"""
 
 import argparse
+import json
 import re
 from datetime import datetime
 
 import xlrd
 
 from drawing import Drawing
+
+def ParseJSONFile(fileName):
+    """
+    Parses a JSON file in a way that allows for comments in the form of lines that
+    start with "//". Any JSON parsing errors that occur must be handled by the calling function.
+
+    :param fileName:    The path to the JSON file to parse
+    :type filename:     String
+    :return:            Dictionary containing the JSON file parsed by json.loads
+    """
 
 
 
