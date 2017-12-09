@@ -10,8 +10,8 @@ from powerball import MAX_RED, MAX_WHITE
 
 class RandomPicker(Picker):
 
-    def __init__(self):
-        super(RandomPicker, self).__init__()
+    def __init__(self, **kwargs):
+        super(RandomPicker, self).__init__(**kwargs)
 
     def Pick(pastDrawings, numPicks, altReds=True):
         """Pick numbers randomly and put them into drawings"""

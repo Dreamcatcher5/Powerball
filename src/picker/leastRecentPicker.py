@@ -4,8 +4,8 @@ from picker import Picker
 
 class LeastRecentPicker(Picker):
 
-    def __init__(self):
-        super(RandomPicker, self).__init__()
+    def __init__(self, **kwargs):
+        super(RandomPicker, self).__init__(**kwargs)
 
     def Pick(pastDrawings, numPicks, altReds=True):
     	return None
