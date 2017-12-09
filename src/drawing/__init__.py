@@ -1,10 +1,9 @@
 
+from datetime import datetime
 
-
+from powerball import NUM_WHITES
 class Drawing():
 
-
-	NUM_WHITES = 5
 	JACKPOT = -1
 
 	def __init__(self, date, numbers=[], powerball=0, jackpot=None):
@@ -12,6 +11,15 @@ class Drawing():
 		self._numbers = set(int(n) for n in list(numbers))
 		self._powerball = int(powerball)
 		self._jackpot = self.JACKPOT if jackpot is None else jackpot
+
+	def __repr__(self):
+
+		strRep = ""
+		if self._date is not None:
+			strRep = "Drawing date: " +  self._date.strftime("%A %m/%d/%Y") + "\n"
+		return strRep + "Numbers: [" + " ".join([str(x) for x in self._numbers]) + \
+					"]\tPowerball: " + str(self._powerball)
+
 
 	def GetDate(self):
 		return self._date
@@ -35,14 +43,14 @@ class Drawing():
 	def WinAmount(self, picks):
 		"""Determine winnings based on the picks"""
 		amt = 0
-		red = MatchingPowerball(self, picks)
-		numMatching = MatchingNumbers(self, picks)
+		red = self.MatchingPowerball(picks)
+		numMatching = self.MatchingNumbers(picks)
 
 		if not red and numMatching < 3:
 			amt =  0
-		elif red and numMatching == self.NUM_WHITES:
-			amt = self.JACKPOT
-		elif numMatching == self.NUM_WHITES:
+		elif red and numMatching == NUM_WHITES:
+			amt = JACKPOT
+		elif numMatching == NUM_WHITES:
 			amt = 1000000
 		elif red and numMatching == 4:
 			amt = 50000
