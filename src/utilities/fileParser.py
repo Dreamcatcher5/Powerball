@@ -23,6 +23,17 @@ def ParseJSONFile(fileName):
     :return:            Dictionary containing the JSON file parsed by json.loads
     """
 
+    jsonStr = ""
+    i = 1
+    with open(fileName, "r") as f:
+        for l in f.readlines():
+            if l.strip()[:2] == "//":
+                continue
+            i += 1
+            jsonStr += l
+            
+
+    return json.loads(jsonStr)
 
 
 def ParseDrawingsFile(fileName):
