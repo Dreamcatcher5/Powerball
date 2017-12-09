@@ -2,11 +2,11 @@
     // Generic configuration settings. Each setting can be overridden using the command line, with
     // the exception of the picks
 
-    // Path to drawings file
-    "drawingsFile": "",
+    // Path to histocial drawings file
+    "historyFile": "C:\\USers\\Ben\\Documents\\GitHub\\Powerball\\src\\powerball.txt",
 
     // Path to jackpot file
-    "jackpotFile": "",
+    "jackpotFile": "C:\\USers\\Ben\\Documents\\GitHub\\Powerball\\src\\jackpots.xlsx",
 
     // Starting drawing date to start making picks. TODO: determine format
     "dateStart": "",
@@ -21,13 +21,7 @@
     "output": "",
 
 
-    "picks": {
-        //Format:
-        // Key: name of picker
-        // Value: list, first value is the number of picks to make per drawing, second is a tuple for
-        //      options depending on the specific picker type
-
-        "randomPicker": [1, ()]
-
-    }
+    "picks": [
+        {"name": "RandomPicker", "picksPerDrawing": 1, "altReds": 1}
+    ]
 }
