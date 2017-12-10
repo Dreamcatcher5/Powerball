@@ -3,10 +3,10 @@
     // the exception of the picks
 
     // Path to histocial drawings file
-    "historyFile": "C:\\USers\\Ben\\Documents\\GitHub\\Powerball\\src\\powerball.txt",
+    "historyFile": "",
 
     // Path to jackpot file
-    "jackpotFile": "C:\\USers\\Ben\\Documents\\GitHub\\Powerball\\src\\jackpots.xlsx",
+    "jackpotFile": "",
 
     // Starting drawing date to start making picks. TODO: determine format
     "dateStart": "",
