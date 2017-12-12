@@ -49,7 +49,7 @@ class Drawing():
 		if not red and numMatching < 3:
 			amt =  0
 		elif red and numMatching == NUM_WHITES:
-			amt = JACKPOT
+			amt = 100000000 ###TODO figure out what to do for this
 		elif numMatching == NUM_WHITES:
 			amt = 1000000
 		elif red and numMatching == 4:
