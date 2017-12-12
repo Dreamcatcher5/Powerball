@@ -1,10 +1,13 @@
-"""Play powerball using a serices of number picking algorithms and compare the results against
+"""Play powerball using a series of number picking algorithms and compare the results against
 historical powerball drawings
 
 Author: Ben Johnstone
 
 TODO: Start and end dates
 """
+
+import argparse
+from json import JSONDecodeError
 
 from picker.factory import PickerFactory
 from utilities.fileParser import ParseJSONFile, ParseDrawingsFile, ParseJackpotFile
@@ -20,9 +23,9 @@ class Playmaker(object):
         self._pickCost = 2
         self._outFile = None  ##TODO temporary placeholder, use logger
 
-    def CalculateWinnings(self, draw, picks):
-        """Prints the comparison of picks versus a drawing and calculates win amount. TODO Use logger"""
-        
+    # def CalculateWinnings(self, draw, picks):
+    #     """Prints the comparison of picks versus a drawing and calculates win amount. TODO Use logger"""
+    #     return 1
 
 
     def DisplayTotals(self, picks):
@@ -37,14 +40,17 @@ class Playmaker(object):
         # Net winnings
 
         # placeholder for more complete statistics, just print the total money won
+        for k, v in picks.items():
+            print(k, v)
+        
 
+    def GetHistoryFile(self):
+        return self._historyFile
 
-    def SetConfiguration(self, config=None, jsonConfig=None, args=None):
+    def SetConfiguration(self, jsonConfig=None, args=None):
         """Sets the configuration for the run. Values in args will override any values in the
         jsonConfig dictionary
 
-        :param config:
-        :type config:
         :param jsonConfig:
         :type jsonConfig:
         :param args:
@@ -52,12 +58,18 @@ class Playmaker(object):
         :return: 
         """
 
+        for k, v in jsonConfig.items():
+            if hasattr(self, "_" + k):
+                setattr(self, "_"+ k, v)
+
+        # Let command line args override JSON config
+
     def Run(self, config, history):
-    	"""Creates pickers from the JSON configuration. Compares picks against historical data
-    	:param config: Parsed JSON configuration file
-    	:type config: list
-    	:param history: Historical drawings
-    	"""
+        """Creates pickers from the JSON configuration. Compares picks against historical data
+        :param config: Parsed JSON configuration file
+        :type config: list
+        :param history: Historical drawings
+        """
 
         pickers = {}
         #TODO figure out how to do date ranges
@@ -65,59 +77,58 @@ class Playmaker(object):
         # Create the pickers
         pf = PickerFactory()
         for pickerDict in config["picks"]:
-            pickerObj = pf.CreatePicker(pickerDict["name"], pickerDict)
+            pickerObj = pf.CreatePicker(pickerDict["name"], **pickerDict)
             if pickerObj is None:
                 print("Unable to create picker ", pickerDict["name"])
                 continue
             pickers[pickerObj] = 0
+        
         # Ignoring start and end date for now
-
         for i in range(1, len(history)):
             past = history[:i]
-
+            #print(history[i])
             # Make picks based on the previous drawings
             for p, n in pickers.items():
                 p.Pick(past)
-                pickers[p] += CalculateWinnings(past, p)
+                for d in p.GetPicks():
+                    pickers[p] += history[i].WinAmount(d)
 
-        DisplayTotals(picks)
+        self.DisplayTotals(pickers)
 
 
 
 def Main():
-	"""Reads user input from drawings file and picker JSON. Uses pickers to make picks based on the
-	JSON, and will compare them against the historical drawings to calculate winnings."""
+    """Reads user input from drawings file and picker JSON. Uses pickers to make picks based on the
+    JSON, and will compare them against the historical drawings to calculate winnings."""
 
-	config = ""
-	history = []
-	parser = argparse.ArgumentParser(description="")
-    parser.add_argument("--history", "-h", required=False,
+    config = ""
+    history = []
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("--history", required=False,
                         help="Name of the file containing the historical powerball drawings")
     parser.add_argument("--config", "-c", help="JSON configuration file that contains the types" \
-        	            + " of picks to make", required=False)
+                        + " of picks to make", required=True)
     # Start date (optional)
     # End date (optional)
     # Output file
-    args = parse.parse_args()
+    args = parser.parse_args()
     pm = Playmaker()
-
+    
     try:
         # Parse config file
-        json_config = ParseJSONFile(args.config)
-        pm.SetConfiguration(json_config=json_config)
+        jsonConfig = ParseJSONFile(args.config)
+        pm.SetConfiguration(jsonConfig=jsonConfig)
 
         # Parse history file
-        history = ParseDrawingsFile(args.history)
+        history = ParseDrawingsFile(pm.GetHistoryFile())
         # validate against start/end dates
 
-    except JsonException as e:
-        print("JSON error")
-        print(e)
-    except Exception as e:
-        print(e)
+    except JSONDecodeError as e:
+        print("JSON error: ", e)
 
-    #Run(json_config, args.history)
+
+    pm.Run(jsonConfig, history)
 
 
 if __name__ == "__main__":
-	Main()
+    Main()
