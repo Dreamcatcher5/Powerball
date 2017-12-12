@@ -1,5 +1,9 @@
+"""
+A picker for choosing numbers based on what has been seen least recently.
 
-#from src.utilities.metrics import leastRecentReds, leastRecentWhites
+Author: Ben Johnstone
+"""
+from utilities.metrics import LeastRecentReds, LeastRecentWhites
 from picker import Picker
 
 class LeastRecentPicker(Picker):
@@ -8,8 +12,12 @@ class LeastRecentPicker(Picker):
         super(RandomPicker, self).__init__(**kwargs)
 
     def Pick(self, pastDrawings):
-    	return None
-        #lrReds = leastRecentReds(pastDrawings)
-        #lrWhites = leastRecentWhites(pastDrawings)
+        """Make drawings by picking numbers randomly.
+        :param pastDrawings:    Previous drawings that can be used to base picks on
+        :type pastDrawings:     list of Drawings
+        :return:                list of Drawings created by the picker"""
+        return None
+        #lrReds = LeastRecentReds(pastDrawings)
+        #lrWhites = LeastRecentWhites(pastDrawings)
 
 

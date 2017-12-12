@@ -15,7 +15,10 @@ class RandomPicker(Picker):
         super(RandomPicker, self).__init__(**kwargs)
 
     def Pick(self, pastDrawings):
-        """Pick numbers randomly and put them into drawings"""
+        """Make drawings by picking numbers randomly.
+        :param pastDrawings:    Previous drawings that can be used to base picks on
+        :type pastDrawings:     list of Drawings
+        :return:                list of Drawings created by the picker"""
         randRed = None
         self._picks = []
         for _ in range(self._picksPerDrawing):
