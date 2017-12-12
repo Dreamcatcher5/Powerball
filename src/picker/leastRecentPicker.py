@@ -7,7 +7,7 @@ class LeastRecentPicker(Picker):
     def __init__(self, **kwargs):
         super(RandomPicker, self).__init__(**kwargs)
 
-    def Pick(pastDrawings, numPicks, altReds=True):
+    def Pick(self, pastDrawings):
     	return None
         #lrReds = leastRecentReds(pastDrawings)
         #lrWhites = leastRecentWhites(pastDrawings)
