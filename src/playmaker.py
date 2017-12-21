@@ -11,7 +11,7 @@ from json import JSONDecodeError
 
 from picker.factory import PickerFactory
 from utilities.fileParser import ParseJSONFile, ParseDrawingsFile, ParseJackpotFile
-
+from utilities.metrics import MostCommonWhites, LeastRecentWhites, MostCommonReds, LeastRecentReds 
 
 class Playmaker(object):
 
@@ -28,7 +28,7 @@ class Playmaker(object):
     #     return 1
 
 
-    def DisplayTotals(self, picks):
+    def DisplayTotals(self, picks, history):
 
 
         # Average whites per pick
@@ -41,7 +41,11 @@ class Playmaker(object):
 
         # placeholder for more complete statistics, just print the total money won
         for k, v in picks.items():
-            print(k, v)
+            cost = self._pickCost * k._picksPerDrawing * len(history)
+            print("Picker ", k)
+            print("\tGross winnings: ", v)
+            print("\tTotal cost: ",cost)
+            print("\tNet winnings: ", v - cost)
         
 
     def GetHistoryFile(self):
@@ -70,7 +74,7 @@ class Playmaker(object):
         :type config: list
         :param history: Historical drawings
         """
-
+        
         pickers = {}
         #TODO figure out how to do date ranges
 
@@ -93,7 +97,7 @@ class Playmaker(object):
                 for d in p.GetPicks():
                     pickers[p] += history[i].WinAmount(d)
 
-        self.DisplayTotals(pickers)
+        self.DisplayTotals(pickers, history)
 
 
 
@@ -121,13 +125,11 @@ def Main():
 
         # Parse history file
         history = ParseDrawingsFile(pm.GetHistoryFile())
-        # validate against start/end dates
+
+        pm.Run(jsonConfig, history)
 
     except JSONDecodeError as e:
         print("JSON error: ", e)
-
-
-    pm.Run(jsonConfig, history)
 
 
 if __name__ == "__main__":
