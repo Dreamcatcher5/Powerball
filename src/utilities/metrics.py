@@ -1,4 +1,7 @@
 
+import random
+
+from powerball import MAX_WHITE, MAX_RED
 
 
 def LeastRecentWhites(drawings):
@@ -17,7 +20,12 @@ def LeastRecentWhites(drawings):
         if len(seenBalls) == MAX_WHITE:
             break
 
-    return [k for k in sorted(seenBalls, key=seenBalls.get)]
+    # Add any balls that haven't been seen yet in random order
+    unseen = list(set(range(1, MAX_WHITE)).difference(set(seenBalls.keys())))
+    random.shuffle(unseen)
+    retval = [k for k in sorted(seenBalls, key=seenBalls.get)]
+    retval.extend(unseen)
+    return retval
 
 def LeastRecentReds(drawings):
     """Take the list of drawings and return a list of the seen red balls, ordered from least to
@@ -34,25 +42,45 @@ def LeastRecentReds(drawings):
         if len(seenBalls) == MAX_RED:
             break
 
-    return [k for k in sorted(seenBalls, key=seenBalls.get)]
+    # Add any balls that haven't been seen yet in random order
+    unseen = list(set(range(1, MAX_RED)).difference(set(seenBalls.keys())))
+    random.shuffle(unseen)
+    retval = [k for k in sorted(seenBalls, key=seenBalls.get)]
+    retval.extend(unseen)
+    return retval
 
 def MostCommonWhites(drawings):
     """Using a list of drawings, return a list of the white balls, from most to least common"""
-    ballCount = dict((k, 0) for k in range(1, MAX_WHITE+1))
+    ballCount = {}
     for d in drawings:
         for b in d.GetNumbers():
-            ballCount[b] += 1
+            if b in ballCount:
+                ballCount[b] += 1
+            else:
+                ballCount[b] = 1
 
-    return [k for k in sorted(ballCount, key=ballCount.get, reverse=True)]
+    # Add any balls that haven't been seen yet in random order
+    unseen = list(set(range(1, MAX_WHITE)).difference(set(ballCount.keys())))
+    random.shuffle(unseen)
+    retval = [k for k in sorted(ballCount, key=ballCount.get, reverse=True)]
+    retval.extend(unseen)
+    return retval
 
 def MostCommonReds(drawings):
     """Using a list of drawings, return a list of the white balls, from most to least common"""
-    ballCount = dict((k, 0) for k in range(1, MAX_RED+1))
+    ballCount = {} #dict((k, 0) for k in range(1, MAX_RED+1))
 
     for d in drawings:
         # The number of possible red balls has changed over time. If the ball is not in the current
         # range, ignore it.
         if d in ballCount:
             ballCount[d.GetPowerball()] += 1
+        else:
+            ballCount[d.GetPowerball()] = 1
 
-    return [k for k in sorted(ballCount, key=ballCount.get, reverse=True)]
+    # Add any balls that haven't been seen yet in random order
+    unseen = list(set(range(1, MAX_RED)).difference(set(ballCount.keys())))
+    random.shuffle(unseen)
+    retval = [k for k in sorted(ballCount, key=ballCount.get, reverse=True)]
+    retval.extend(unseen)
+    return retval
