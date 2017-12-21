@@ -1,0 +1,27 @@
+{
+    // Generic configuration settings. Each setting can be overridden using the command line, with
+    // the exception of the picks
+
+    // Path to histocial drawings file
+    "historyFile": "",
+
+    // Path to jackpot file
+    "jackpotFile": "",
+
+    // Starting drawing date to start making picks. TODO: determine format
+    "dateStart": "",
+
+    // Ending drawing date for making picks. TODO: determine format
+    "dateEnd": "",
+
+    // Cost per pick. Default is 2
+    "pickCost": 2,
+
+    // Output file. If none is given, results will be displayed in standard out
+    "output": "",
+
+
+    "picks": [
+        {"name": "RandomPicker", "picksPerDrawing": 1, "altReds": 1}
+    ]
+}
